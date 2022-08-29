@@ -7,28 +7,37 @@
     <title>User Api</title>
 </head>
 <body>
+    <div id="load">
+        <input id="count" type="text" placeholder="Enter the number of user">
+        <button id="load-btn">Load User</button>
+    </div>
     <div id="users"></div>
-
-
-
-
+    
     <script>
-        fetch('https://jsonplaceholder.typicode.com/users')
-        .then(res => res.json())
-        .then(data => {
-            const user_container=document.getElementById("users");
-            for (let i = 0; i < data.length; i++) {
-                const user_data = data[i];
-                const p = document.createElement('p');
-                p.innerHTML=`
-                <div class="user_profile" id=${user_data.id}> 
-                    <h1>${user_data.name}</h1> 
-                <button onclick="moreDetails(${user_data.id})">More Details</button>           
-                </div>  
-                 `;
-                user_container.appendChild(p);
+        const loadBtn=document.getElementById("load-btn");
+        loadBtn.addEventListener("click",function () {
+            const countText= document.getElementById("count").value;
+            count = parseFloat(countText);
+            fetch('https://jsonplaceholder.typicode.com/users')
+            .then(res => res.json())
+            .then(data => {
+                const user_container=document.getElementById("users");
+                user_container.innerHTML="";
+                data = data.slice(0,count);
+                for (let i = 0; i < data.length; i++) {
+                    const user_data = data[i];
+                    const p = document.createElement('p');
+                    p.innerHTML=`
+                    <div class="user_profile" id=${user_data.id}> 
+                        <h1>${user_data.name}</h1> 
+                        <button onclick="moreDetails(${user_data.id})">More Details</button>           
+                    </div>  
+                    `;
+                     user_container.appendChild(p);
             }  
         })
+        })
+        
         function moreDetails(userId,id) {
             fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
             .then(res => res.json())
