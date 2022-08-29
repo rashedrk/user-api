@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Api</title>
+</head>
+<body>
+    <div id="users"></div>
+
+
+
+
+    <script>
+        fetch('https://jsonplaceholder.typicode.com/users')
+        .then(res => res.json())
+        .then(data => {
+            const user_container=document.getElementById("users");
+            for (let i = 0; i < data.length; i++) {
+                const user_data = data[i];
+                const p = document.createElement('p');
+                p.innerHTML=`
+                <div class="user_profile" id=${user_data.id}> 
+                    <h1>${user_data.name}</h1> 
+                <button onclick="moreDetails(${user_data.id})">More Details</button>           
+                </div>  
+                 `;
+                user_container.appendChild(p);
+            }  
+        })
+        function moreDetails(userId,id) {
+            fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                const user_details=document.getElementById(userId).innerHTML=`
+                    <h2>Name: <small>${data.name}<small></h2>
+                    <h4>Address: ${data.address.street}, ${data.address.city}</h4>
+                    <h4>Email: ${data.email}</h4>
+                    <h4>Phone: ${data.phone}</h4>
+                    `;
+            })
+        }
+    </script>
+</body>
+</html>
